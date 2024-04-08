@@ -15,7 +15,7 @@ jobs:
       MYSQL_USER: test_user
       MYSQL_PASSWORD: password
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-      MYSQL_PORT: 33061
+      MYSQL_PORT: 3306
     services:
       mysql:
         image: mysql
@@ -26,7 +26,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: ${{env.MYSQL_ROOT_PASSWORD}}
           MYSQL_DATABASE: ${{env.MYSQL_DATABASE}}
         ports:
-          - 33061:3306
+          - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
           
     runs-on: ubuntu-latest
