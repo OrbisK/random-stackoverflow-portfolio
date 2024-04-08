@@ -8,6 +8,27 @@ on:
 
 jobs:
   build:
+    container: orbisk/django-test:3:11
+    env:
+      MYSQL_HOST: 127.0.0.1
+      MYSQL_DATABASE: test_db
+      MYSQL_USER: test_user
+      MYSQL_PASSWORD: password
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_PORT: 33061
+    services:
+      mysql:
+        image: mysql
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: ${{env.MYSQL_ALLOW_EMPTY_PASSWORD}}
+          MYSQL_USER: ${{env.MYSQL_USER}}
+          MYSQL_PASSWORD: ${{env.MYSQL_PASSWORD}}
+          MYSQL_ROOT_PASSWORD: ${{env.MYSQL_ROOT_PASSWORD}}
+          MYSQL_DATABASE: ${{env.MYSQL_DATABASE}}
+        ports:
+          - 33061:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+          
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
@@ -23,62 +44,15 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
-
-      - name: Set up
-        env:
-          ENGINE: django.db.backends.mysql
-          NAME: portfolio_db
-          USER: python
-          PASSWORD: python123
-          HOST: localhost
-          PORT: 3306
-        run: |
-          sudo systemctl start mysql
-          mysql -u root -proot -e "CREATE USER '$USER'@'localhost' IDENTIFIED BY '$PASSWORD';"
-          mysql -u root -proot -e "GRANT CREATE, DROP, SELECT, UPDATE, INSERT, DELETE, ALTER, REFERENCES, INDEX on $NAME.* to '$USER'@'localhost';"
-          mysql -u root -proot -e "GRANT CREATE, DROP, SELECT, UPDATE, INSERT, DELETE, ALTER, REFERENCES, INDEX on test_$NAME.* to '$USER'@'localhost';"
-          mysql -u$USER -p$PASSWORD -e "CREATE DATABASE $NAME DEFAULT CHARACTER SET utf8mb4;"
-          python3 --version
-          python3 -m venv venv
-          source venv/bin/activate
-          python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt
-          python manage.py makemigrations register
-          python manage.py makemigrations vietnam_research gmarker shopping linebot warehouse
-          
-          # Output the environment variables
-          echo $ENGINE
-          echo $NAME
-          echo $USER
-          echo $PASSWORD
-          echo $HOST
-          echo $PORT
-          
-          python manage.py migrate
-          export DJANGO_SECRET_KEY="$(base64 <<< "$RANDOM|TeStiNg|$RANDOM" | tr -d '\n')"
-
-      - name: Check Tables and Permissions
-        env:
-          DB_NAME: portfolio_db
-          DB_USER: root
-          DB_USER_PYTHON: python
-          DB_PASSWORD: root
-          DB_PASSWORD_PYTHON: python123
-        run: |
-          echo "Checking DB tables..."
-          mysql -u$DB_USER_PYTHON -p$DB_PASSWORD_PYTHON -e "USE $DB_NAME; SHOW TABLES;"
-          echo "Checking user permissions..."
-          mysql -u$DB_USER -p$DB_PASSWORD -e "SHOW GRANTS FOR '$DB_USER_PYTHON'@'localhost';"
-
       - name: Run tests
         env:
           ENGINE: django.db.backends.mysql
-          NAME: portfolio_db
-          USER: python
-          PASSWORD: python123
-          HOST: localhost
-          PORT: 3306
+          NAME: ${{env.MYSQL_DATABASE}}
+          USER: ${{env.MYSQL_USER}}
+          PASSWORD: ${{env.MYSQL_PASSWORD}}
+          HOST: ${{env.MYSQL_HOST}}
+          PORT: ${{env.MYSQL_PORT}}
         run: |
-          mysql -u root -proot -e "GRANT ALL on *.* to '$USER';"| mysql -u $USER --password="$PASSWORD" -h $HOST
+          echo "GRANT ALL on *.* to '${{env.MYSQL_USER}}';"| mysql -u root  -h ${{env.MYSQL_HOST}} --port=${{env.MYSQL_PORT}}
           source venv/bin/activate
           python manage.py test
