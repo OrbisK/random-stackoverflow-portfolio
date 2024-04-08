@@ -155,3 +155,4 @@ python manage.py import_soil_hardness /path/to/folder
 - [仕様書](docs/taxonomy/specification.md)
 - 興味のある動物の分類を関係図に表示
 - タグ付けをして分析のサポートができる
+
