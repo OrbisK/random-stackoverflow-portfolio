@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    container: orbisk/django-test:3:11
+    container: orbisk/django-test:3.11
     env:
       MYSQL_HOST: 127.0.0.1
       MYSQL_DATABASE: test_db
@@ -39,11 +39,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: pip
       - name: Run tests
         env:
           ENGINE: django.db.backends.mysql
