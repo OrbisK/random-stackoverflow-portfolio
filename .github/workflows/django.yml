@@ -41,12 +41,12 @@ jobs:
 
       - name: Run tests
         env:
-          ENGINE: django.db.backends.mysql
-          NAME: ${{env.MYSQL_DATABASE}}
-          USER: ${{env.MYSQL_USER}}
-          PASSWORD: ${{env.MYSQL_PASSWORD}}
-          HOST: ${{env.MYSQL_HOST}}
-          PORT: ${{env.MYSQL_PORT}}
+          DJANGO_SECRET_KEY: "not_secret"
+          MYSQL_USER: ${{env.MYSQL_USER}}
+          MYSQL_PASSWORD: ${{env.MYSQL_PASSWORD}}
+          MYSQL_ROOT_PASSWORD: ${{env.MYSQL_ROOT_PASSWORD}}
+          MYSQL_DATABASE: ${{env.MYSQL_DATABASE}}
+          MYSQL_HOST: ${{env.MYSQL_HOST}}
         run: |
           pip3 install -r requirements.txt
           echo "GRANT ALL on *.* to '${{env.MYSQL_USER}}';"| mysql -u root  --host=${{env.MYSQL_HOST}} --port=${{env.MYSQL_PORT}}

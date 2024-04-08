@@ -81,15 +81,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'portfolio_db',
-        'USER': 'python',
-        'PASSWORD': 'python123',
-        'HOST': 'localhost',
-        'PORT': '3306',
-        'TEST': {
-            'NAME': 'test_portfolio_db',
-        },
+        "ENGINE": "django.db.backends.mysql",
+        "HOST": env.str("MYSQL_HOST"),
+        "PORT": env.int("MYSQL_PORT"),
+        "NAME": env.str("MYSQL_DATABASE"),
+        "USER": env.str("MYSQL_USER"),
+        "PASSWORD": env.str("MYSQL_PASSWORD"),
     }
 }
 
