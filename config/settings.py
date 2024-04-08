@@ -11,16 +11,17 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 from pathlib import Path
+import environ
 
-from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # read at .env
-load_dotenv(BASE_DIR / '.env')
-DEBUG = os.environ.get('DJANGO_DEBUG_MODE')  # read DEBUG at .env
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')  # read SECRET_KEY at .env
+
+env = environ.FileAwareEnv()
+DEBUG =  env.str('DJANGO_DEBUG_MODE')  # read DEBUG at .env
+SECRET_KEY =  env.str('DJANGO_SECRET_KEY')  # read SECRET_KEY at .env
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -128,11 +129,11 @@ LOGOUT_REDIRECT_URL = "vnm:index"
 AUTH_USER_MODEL = 'register.User'
 
 # mail
-EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')
-EMAIL_HOST = os.environ.get('EMAIL_HOST')
-EMAIL_PORT = os.environ.get('EMAIL_PORT')
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('REGISTER')
+EMAIL_BACKEND =  env.str('EMAIL_BACKEND')
+EMAIL_HOST =  env.str('EMAIL_HOST')
+EMAIL_PORT =  env.int('EMAIL_PORT')
+EMAIL_HOST_USER =  env.str('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD =  env.str('REGISTER')
 EMAIL_USE_TLS = True
 
 # Static files (CSS, JavaScript, Images)
