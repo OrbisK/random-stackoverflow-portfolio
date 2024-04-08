@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # read at .env
 
 env = environ.FileAwareEnv()
-DEBUG =  env.str('DJANGO_DEBUG_MODE')  # read DEBUG at .env
+DEBUG =  env.bool('DJANGO_DEBUG_MODE', False)  # read DEBUG at .env
 SECRET_KEY =  env.str('DJANGO_SECRET_KEY')  # read SECRET_KEY at .env
 
 # Quick-start development settings - unsuitable for production
