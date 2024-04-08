@@ -129,11 +129,11 @@ LOGOUT_REDIRECT_URL = "vnm:index"
 AUTH_USER_MODEL = 'register.User'
 
 # mail
-EMAIL_BACKEND =  env.str('EMAIL_BACKEND')
-EMAIL_HOST =  env.str('EMAIL_HOST')
-EMAIL_PORT =  env.int('EMAIL_PORT')
-EMAIL_HOST_USER =  env.str('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD =  env.str('REGISTER')
+EMAIL_BACKEND =  env.str('EMAIL_BACKEND', "")
+EMAIL_HOST =  env.str('EMAIL_HOST', "")
+EMAIL_PORT =  env.int('EMAIL_PORT', "")
+EMAIL_HOST_USER =  env.str('EMAIL_HOST_USER', "")
+EMAIL_HOST_PASSWORD =  env.str('REGISTER', "")
 EMAIL_USE_TLS = True
 
 # Static files (CSS, JavaScript, Images)
