@@ -49,5 +49,4 @@ jobs:
           PORT: ${{env.MYSQL_PORT}}
         run: |
           echo "GRANT ALL on *.* to '${{env.MYSQL_USER}}';"| mysql -u root  --host=${{env.MYSQL_HOST}} --port=${{env.MYSQL_PORT}}
-          source venv/bin/activate
           python manage.py test
